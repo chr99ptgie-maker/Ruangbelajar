@@ -1,0 +1,417 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f5ef">
+  <title>Ruang Belajar — Temukan pelajaranmu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f6f5ef;
+      --ink: #202720;
+      --muted: #70766d;
+      --line: #dedfd5;
+      --green: #376b50;
+      --lime: #d7ed76;
+      --orange: #e77e54;
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "DM Sans", "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .page { width: min(1240px, calc(100% - 64px)); margin: 0 auto; }
+    .topbar { position: relative; height: 96px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .watermark { position: absolute; top: 5px; right: 0; display: flex; flex-direction: column; align-items: flex-end; color: var(--muted); font-size: 9px; font-weight: 700; line-height: 1; text-align: right; }
+    .watermark small { max-width: min(230px, 70vw); margin-top: 3px; font-size: 8px; font-weight: 700; line-height: 1.2; }
+    .brand { display: inline-flex; gap: 10px; align-items: center; font-weight: 700; font-size: 17px; letter-spacing: 0; }
+    .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; background: var(--green); color: var(--lime); border-radius: 9px; font-size: 17px; }
+    .main-nav { display: flex; align-items: center; gap: 30px; color: var(--muted); font-size: 13px; }
+    .main-nav a:first-child { color: var(--ink); font-weight: 700; }
+
+    .welcome { display: grid; grid-template-columns: 1fr 315px; gap: 42px; align-items: end; padding: 50px 0 35px; }
+    .eyebrow { margin: 0 0 12px; color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { max-width: 700px; margin: 0; font-family: var(--serif); font-size: clamp(36px, 5vw, 58px); font-weight: 500; line-height: 1.04; letter-spacing: 0; }
+    h1 em { color: var(--green); font-weight: 500; }
+    .welcome-copy { max-width: 430px; margin: 16px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .streak { display: flex; align-items: center; gap: 14px; padding: 17px 18px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.4); }
+    .streak-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 7px; background: #f4d0b6; font-size: 22px; }
+    .streak strong { display: block; font-size: 14px; }
+    .streak span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+
+    .featured { min-height: 250px; display: grid; grid-template-columns: 1fr 42%; overflow: hidden; border-radius: 8px; background: var(--green); color: white; }
+    .featured-copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 32px 42px; }
+    .featured-label { margin-bottom: 14px; color: var(--lime); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .featured h2 { max-width: 500px; margin: 0; font-family: var(--serif); font-size: clamp(27px, 3.4vw, 39px); font-weight: 500; line-height: 1.12; }
+    .featured p { margin: 12px 0 20px; color: #d9e5d7; font-size: 12px; }
+    .primary-button { min-height: 42px; padding: 0 17px; display: inline-flex; align-items: center; gap: 10px; border: 0; border-radius: 5px; background: var(--lime); color: var(--ink); font-size: 12px; font-weight: 700; cursor: pointer; transition: transform .18s ease, background .18s ease; }
+    .primary-button:hover { transform: translateY(-2px); background: #e3f59a; }
+    .featured-image { min-height: 250px; background: linear-gradient(90deg, rgba(55,107,80,.12), transparent), url("https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1100&q=85") center 48% / cover; }
+
+    .catalog { padding: 42px 0 70px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 21px; }
+    .section-heading h2 { margin: 0; font-family: var(--serif); font-size: 30px; font-weight: 500; letter-spacing: 0; }
+    .section-heading p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .search { width: min(270px, 40vw); height: 40px; display: flex; align-items: center; gap: 9px; padding: 0 12px; border: 1px solid var(--line); border-radius: 5px; background: #fbfaf6; color: var(--muted); }
+    .search span { font-size: 17px; }
+    .search input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 12px; }
+    .search:focus-within { border-color: var(--green); box-shadow: 0 0 0 2px rgba(55,107,80,.12); }
+    .filters { display: flex; gap: 7px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 2px; scrollbar-width: thin; }
+    .filter { min-height: 32px; padding: 0 13px; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 4px; background: transparent; color: var(--muted); font-size: 11px; cursor: pointer; transition: .18s ease; }
+    .filter:hover, .filter.active { border-color: var(--green); background: var(--green); color: white; }
+    .course-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .course-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: #fbfaf6; transition: transform .2s ease, box-shadow .2s ease; animation: appear .35s both; }
+    .course-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(32,39,32,.08); }
+    .course-art { position: relative; height: 154px; background-position: center; background-size: cover; }
+    .course-art::after { position: absolute; inset: 45% 0 0; content: ""; background: linear-gradient(transparent, rgba(0,0,0,.24)); }
+    .course-level { position: absolute; z-index: 1; bottom: 11px; left: 12px; padding: 5px 8px; border-radius: 3px; background: rgba(250,249,242,.93); font-size: 9px; font-weight: 700; }
+    .bookmark { position: absolute; z-index: 2; top: 10px; right: 10px; width: 32px; height: 32px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(250,249,242,.94); font-size: 17px; cursor: pointer; }
+    .bookmark.saved { color: #d06446; }
+    .course-info { padding: 15px 15px 14px; }
+    .course-subject { margin: 0 0 6px; color: var(--green); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .course-info h3 { margin: 0; font-family: var(--serif); font-size: 21px; font-weight: 500; line-height: 1.15; }
+    .course-info > p:not(.course-subject) { min-height: 34px; margin: 8px 0 15px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .course-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 11px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    .course-footer button { padding: 0; border: 0; background: transparent; color: var(--green); font-size: 11px; font-weight: 700; cursor: pointer; }
+    .empty-state { grid-column: 1 / -1; padding: 36px 16px; color: var(--muted); text-align: center; font-size: 13px; }
+    .progress-strip { height: 3px; margin-top: 12px; overflow: hidden; border-radius: 3px; background: #e5e6db; }
+    .progress-strip span { display: block; height: 100%; background: var(--orange); transition: width .3s ease; }
+    footer { display: flex; justify-content: space-between; gap: 16px; padding: 20px 0 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+
+    dialog { width: min(620px, calc(100% - 32px)); max-height: min(88vh, 760px); overflow-y: auto; padding: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 80px rgba(20,30,20,.25); }
+    dialog::backdrop { background: rgba(20,30,20,.48); backdrop-filter: blur(3px); }
+    .dialog-content { padding: 27px; }
+    .dialog-top { display: flex; align-items: center; justify-content: space-between; }
+    .dialog-top .eyebrow { margin: 0; }
+    .close-button { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 50%; background: transparent; font-size: 18px; cursor: pointer; }
+    dialog h2 { margin: 17px 0 9px; font-family: var(--serif); font-size: 34px; font-weight: 500; line-height: 1.1; }
+    dialog p { color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .lesson-list { margin: 20px 0; border-top: 1px solid var(--line); }
+    .lesson-entry { padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .lesson-entry h3 { margin: 0 0 7px; font-family: var(--serif); font-size: 18px; font-weight: 500; line-height: 1.3; }
+    .lesson-entry h3 span { margin-right: 7px; color: var(--green); font-family: var(--sans); font-size: 10px; font-weight: 700; }
+    .lesson-entry p { margin: 0; color: #555d53; font-size: 12px; line-height: 1.75; }
+    .dialog-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .dialog-actions small { color: var(--muted); font-size: 10px; }
+    .toast { position: fixed; right: 24px; bottom: 24px; z-index: 5; padding: 12px 17px; transform: translateY(20px); border-radius: 5px; background: var(--ink); color: white; font-size: 12px; opacity: 0; pointer-events: none; transition: .2s ease; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .celebration { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; overflow: hidden; background: rgba(246,245,239,.22); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s ease, visibility .2s ease; }
+    .celebration.show { opacity: 1; visibility: visible; }
+    .celebration strong { position: relative; z-index: 1; color: var(--green); font-family: var(--serif); font-size: clamp(44px, 11vw, 96px); font-weight: 600; line-height: 1; text-align: center; text-shadow: 0 4px 0 var(--lime), 0 12px 32px rgba(32,39,32,.2); animation: excellent-pop .65s cubic-bezier(.16,1.3,.4,1) both; }
+    .firework-piece { position: absolute; width: 7px; height: 12px; border-radius: 2px; opacity: 0; animation: firework-burst 1.6s cubic-bezier(.12,.65,.25,1) var(--delay) forwards; }
+    @keyframes firework-burst { 0% { opacity: 0; transform: translate(0,0) scale(.2); } 12% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--x),var(--y)) rotate(var(--rotation)) scale(.15); } }
+    @keyframes excellent-pop { from { opacity: 0; transform: scale(.65) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 36px, 600px); }
+      .topbar { height: 100px; }
+      .main-nav { gap: 15px; font-size: 11px; }
+      .main-nav a:nth-child(2) { display: none; }
+      .welcome { grid-template-columns: 1fr; gap: 22px; padding: 37px 0 26px; }
+      .streak { width: min(100%, 300px); }
+      .featured { grid-template-columns: 1fr; }
+      .featured-copy { padding: 27px 25px; }
+      .featured-image { min-height: 155px; grid-row: 1; }
+      .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+      .course-art { height: 125px; }
+      .course-info { padding: 12px; }
+      .course-info h3 { font-size: 18px; }
+      .catalog { padding-top: 34px; }
+    }
+    @media (max-width: 460px) {
+      .main-nav { gap: 12px; }
+      .section-heading { align-items: start; flex-direction: column; gap: 14px; }
+      .search { width: 100%; }
+      .course-grid { grid-template-columns: 1fr; }
+      .course-card { display: grid; grid-template-columns: 38% 1fr; }
+      .course-art { height: 100%; min-height: 170px; }
+      .course-info > p:not(.course-subject) { min-height: 0; }
+      .course-footer { font-size: 9px; }
+      footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#beranda" aria-label="Ruang Belajar, beranda"><span class="brand-mark" aria-hidden="true">r.</span> ruang belajar</a>
+      <span class="watermark">by: raishaputt<small>maap guys banyak minus nya hehehe..</small></span>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="#materi">Jelajahi</a>
+        <a href="#progres">Progresku</a>
+      </nav>
+    </header>
+
+    <main id="beranda">
+      <section class="welcome" aria-labelledby="welcome-title">
+        <div>
+          <h1 id="welcome-title">Belajar sedikit,<br><em>bertumbuh setiap hari.</em></h1>
+          <p class="welcome-copy">Pilih topik yang membuatmu penasaran. Materi singkat dan latihan kecil siap menemanimu hari ini.</p>
+        </div>
+        <aside class="streak" id="progres" aria-label="Progres belajar">
+          <div class="streak-icon" aria-hidden="true">✦</div>
+          <div><strong id="progress-count">0 pelajaran selesai</strong><span>Langkah kecil tetap berarti.</span></div>
+        </aside>
+      </section>
+
+      <section class="featured" aria-labelledby="featured-title">
+        <div class="featured-copy">
+          <span class="featured-label">Pilihan hari ini · Matematika</span>
+          <h2 id="featured-title">Persamaan kuadrat, pola parabola</h2>
+          <p>Kenali cara menemukan akar persamaan kuadrat.</p>
+          <button class="primary-button" type="button" data-course="kuadrat">Mulai belajar <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="featured-image" role="img" aria-label="Suasana kelas dengan cahaya matahari"></div>
+      </section>
+
+      <section class="catalog" id="materi" aria-labelledby="catalog-title">
+        <div class="section-heading">
+          <div><h2 id="catalog-title">Pilih pelajaranmu</h2><p>Materi pilihan untuk menemani rasa ingin tahumu.</p></div>
+          <label class="search"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Cari pelajaran..." aria-label="Cari pelajaran"></label>
+        </div>
+        <div class="filters" role="group" aria-label="Filter mata pelajaran">
+          <button class="filter active" type="button" data-filter="Semua" aria-pressed="true">Semua</button>
+          <button class="filter" type="button" data-filter="Matematika" aria-pressed="false">Matematika</button>
+          <button class="filter" type="button" data-filter="IPA" aria-pressed="false">IPA</button>
+          <button class="filter" type="button" data-filter="Sejarah" aria-pressed="false">Sejarah</button>
+          <button class="filter" type="button" data-filter="Bahasa" aria-pressed="false">Bahasa</button>
+          <button class="filter" type="button" data-filter="Seni" aria-pressed="false">Seni</button>
+        </div>
+        <div class="course-grid" id="course-grid" aria-live="polite"></div>
+      </section>
+    </main>
+    <footer><span>Ruang Belajar · Tempat rasa ingin tahu tumbuh.</span><span>Belajar dengan ritmemu sendiri.</span></footer>
+  </div>
+
+  <dialog id="lesson-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-content">
+      <div class="dialog-top"><p class="eyebrow" id="dialog-category">MATERI</p><button class="close-button" type="button" aria-label="Tutup">×</button></div>
+      <h2 id="dialog-title"></h2>
+      <p id="dialog-description"></p>
+      <div class="lesson-list" id="lesson-list"></div>
+      <div class="dialog-actions"><small id="dialog-duration"></small><button class="primary-button" id="complete-button" type="button">Tandai selesai <span aria-hidden="true">✓</span></button></div>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="celebration" id="celebration" role="status" aria-live="polite" aria-atomic="true"><strong>EXCELLENT!</strong></div>
+
+  <script>
+    const courses = [
+      { id: "kuadrat", title: "Mengenal persamaan kuadrat", category: "Matematika", level: "KELAS 9", duration: "24 menit", description: "Temukan akar persamaan kuadrat lewat faktorisasi dan rumus kuadrat.", image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Bentuk umum persamaan kuadrat", content: "Persamaan kuadrat memiliki bentuk ax² + bx + c = 0, dengan a tidak sama dengan nol. Huruf a, b, dan c adalah bilangan tetap, sedangkan x adalah nilai yang dicari. Contoh: x² − 5x + 6 = 0. Pangkat tertinggi x adalah 2, jadi persamaan ini termasuk persamaan kuadrat." },
+        { title: "Mencari akar dengan faktorisasi", content: "Akar adalah nilai x yang membuat persamaan bernilai nol. Untuk x² − 5x + 6 = 0, cari dua bilangan yang hasil kalinya 6 dan jumlahnya −5, yaitu −2 dan −3. Maka persamaan menjadi (x − 2)(x − 3) = 0, sehingga akarnya x = 2 atau x = 3." },
+        { title: "Contoh dalam kehidupan", content: "Sebuah persegi panjang memiliki lebar x meter dan panjang (x + 2) meter. Jika luasnya 24 m², maka x(x + 2) = 24 atau x² + 2x − 24 = 0. Faktorkan menjadi (x + 6)(x − 4) = 0. Karena ukuran tidak mungkin negatif, lebarnya 4 m dan panjangnya 6 m. Cek: 4 × 6 = 24." },
+        { title: "Menggunakan rumus kuadrat", content: "Jika persamaan sulit difaktorkan, gunakan rumus x = (−b ± √(b² − 4ac)) / 2a. Untuk 2x² + 3x − 2 = 0, nilai a = 2, b = 3, dan c = −2. Substitusi menghasilkan x = (−3 ± 5) / 4, sehingga akarnya 0,5 dan −2. Masukkan kembali hasil ke persamaan awal untuk memeriksa jawaban." },
+        { title: "Diskriminan dan jenis akar", content: "Bagian b² − 4ac disebut diskriminan dan biasanya ditulis D. Jika D positif, persamaan memiliki dua akar real berbeda; jika D sama dengan nol, akarnya kembar; jika D negatif, tidak ada akar real. Contoh x² − 4x + 4 = 0 memiliki D = 16 − 16 = 0, sehingga hanya memiliki satu akar, yaitu x = 2." }
+      ] },
+      { id: "listrik", title: "Listrik dinamis dan rangkaian", category: "IPA", level: "KELAS 9", duration: "23 menit", description: "Pahami arus, tegangan, dan hubungan komponen dalam rangkaian listrik.", image: "https://images.unsplash.com/photo-1472120435266-53107fd0c44a?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Arus dan beda potensial", content: "Arus listrik adalah aliran muatan listrik. Besar arus (I) dapat ditulis I = Q/t, yaitu jumlah muatan (Q) yang mengalir tiap waktu (t), dengan satuan ampere. Beda potensial atau tegangan (V) memberi energi pada muatan agar bergerak, dan diukur dalam volt. Rangkaian harus tertutup supaya arus dapat mengalir." },
+        { title: "Hukum Ohm", content: "Untuk penghantar pada kondisi tetap, tegangan, arus, dan hambatan berhubungan melalui V = I × R. R adalah hambatan dalam ohm (Ω). Contoh: hambatan 4 Ω dialiri arus 0,5 A, maka tegangannya V = 0,5 × 4 = 2 V. Jika tegangan tetap, hambatan yang lebih besar menghasilkan arus yang lebih kecil." },
+        { title: "Rangkaian seri dan paralel", content: "Pada rangkaian seri, komponen tersusun satu jalur sehingga arusnya sama dan hambatan totalnya dijumlahkan. Pada rangkaian paralel, komponen memiliki cabang sendiri sehingga tegangan pada tiap cabang sama. Lampu rumah dipasang paralel: satu lampu mati tidak memutus aliran ke lampu lainnya." },
+        { title: "Mengukur arus dan tegangan", content: "Amperemeter digunakan untuk mengukur arus dan dipasang secara seri dengan komponen yang diukur. Voltmeter mengukur beda potensial dan dipasang paralel pada komponen. Perhatikan batas ukur alat dan jangan menghubungkan alat ukur sembarangan ke sumber listrik. Untuk belajar, gunakan baterai tegangan rendah dan rangkaian sederhana dengan pengawasan guru." },
+        { title: "Daya dan energi listrik", content: "Daya listrik menyatakan seberapa cepat energi digunakan, dengan rumus P = V × I dan satuan watt. Energi dapat dihitung dengan E = P × t. Contohnya, lampu 60 W yang menyala 5 jam menggunakan 300 Wh atau 0,3 kWh. Mematikan lampu saat tidak diperlukan membantu mengurangi pemakaian energi." }
+      ] },
+      { id: "kemerdekaan", title: "Indonesia menuju kemerdekaan", category: "Sejarah", level: "KELAS 9", duration: "28 menit", description: "Telusuri peristiwa penting menjelang proklamasi dan perjuangan mempertahankan kemerdekaan.", image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Masa pendudukan Jepang", content: "Jepang menduduki Indonesia pada 1942 dan mengerahkan sumber daya serta tenaga rakyat untuk kepentingan perang. Kehidupan rakyat sangat berat, tetapi masa ini juga memunculkan organisasi dan pengalaman yang kelak berpengaruh pada perjuangan kemerdekaan. Menjelang kekalahannya, Jepang membentuk BPUPKI untuk membahas persiapan kemerdekaan." },
+        { title: "Proklamasi kemerdekaan", content: "Setelah Jepang menyerah kepada Sekutu pada Agustus 1945, para pemuda mendesak agar kemerdekaan segera diproklamasikan. Soekarno dan Hatta menyusun naskah bersama Ahmad Soebardjo. Pada 17 Agustus 1945, Soekarno membacakan Proklamasi di Jakarta. Peristiwa ini menandai pernyataan kemerdekaan Indonesia kepada rakyat dan dunia." },
+        { title: "Mempertahankan kedaulatan", content: "Sesudah proklamasi, Indonesia menghadapi upaya Belanda untuk kembali berkuasa. Perjuangan dilakukan melalui perlawanan bersenjata sekaligus diplomasi. Perundingan seperti Linggarjati dan Renville menunjukkan usaha mencari pengakuan, sementara dukungan rakyat dan tekanan internasional turut mendorong pengakuan kedaulatan pada 1949." },
+        { title: "BPUPKI dan perumusan dasar negara", content: "BPUPKI membahas berbagai persiapan kemerdekaan, termasuk dasar negara dan rancangan konstitusi. Dalam sidang-sidangnya, tokoh seperti Mohammad Yamin, Soepomo, dan Soekarno menyampaikan gagasan. Pada 1 Juni 1945, Soekarno berpidato tentang dasar negara yang kemudian dikenal sebagai Pancasila. Gagasan itu dibahas bersama dan disesuaikan melalui proses musyawarah." },
+        { title: "PPKI dan langkah awal negara", content: "Sehari setelah Proklamasi, PPKI bersidang untuk mengambil keputusan penting bagi negara yang baru berdiri. Pada 18 Agustus 1945, PPKI mengesahkan UUD 1945 serta memilih Soekarno dan Mohammad Hatta sebagai presiden dan wakil presiden. Keputusan tersebut menjadi langkah awal membentuk pemerintahan dan lembaga negara." }
+      ] },
+      { id: "pidato", title: "Menyusun pidato persuasif", category: "Bahasa", level: "KELAS 9", duration: "22 menit", description: "Bangun gagasan dan argumen yang kuat untuk mengajak pendengar.", image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Struktur teks pidato", content: "Pidato umumnya terdiri dari pembukaan, isi, dan penutup. Pembukaan berisi salam serta pengantar topik. Isi memuat gagasan utama dan alasan pendukung. Penutup merangkum pesan, menyampaikan ajakan atau harapan, lalu diakhiri salam. Susunan yang jelas membantu pendengar mengikuti alur." },
+        { title: "Menyusun argumen dan ajakan", content: "Argumen yang meyakinkan didukung alasan dan bukti, bukan hanya pendapat. Jika topiknya mengurangi sampah plastik, kamu bisa memakai data sampah di sekolah, menjelaskan dampaknya, lalu mengusulkan membawa botol minum sendiri. Hubungkan bukti dengan ajakan agar pendengar tahu tindakan apa yang bisa dilakukan." },
+        { title: "Latihan menyampaikan pidato", content: "Tentukan satu pesan utama, tulis kata kunci tiap bagian, lalu berlatih dengan suara lantang. Gunakan kalimat yang ringkas, jeda setelah gagasan penting, dan pandang pendengar secara bergantian. Rekam latihanmu untuk memeriksa apakah suara terdengar jelas dan durasinya sesuai." },
+        { title: "Memilih topik dan mengenali audiens", content: "Pilih topik yang dekat dengan kebutuhan pendengar dan cukup spesifik untuk dibahas dalam waktu yang tersedia. Sebelum menulis, pikirkan siapa audiensmu, apa yang sudah mereka ketahui, dan tindakan apa yang ingin kamu ajak. Ajakan memilah sampah, misalnya, akan lebih kuat jika disertai contoh kebiasaan yang bisa dilakukan di kelas." },
+        { title: "Menyunting naskah pidato", content: "Baca naskah dengan suara lantang untuk menemukan kalimat yang terlalu panjang atau sulit diucapkan. Pastikan setiap alasan mendukung gagasan utama, data berasal dari sumber tepercaya, dan antarbagian tersambung dengan kata penghubung. Akhiri dengan ajakan yang konkret, misalnya menentukan satu tindakan dan kapan pendengar dapat memulainya." }
+      ] },
+      { id: "genetika", title: "Pewarisan sifat dan genetika", category: "IPA", level: "KELAS 9", duration: "24 menit", description: "Kenali gen, kromosom, dan bagaimana sifat dapat diwariskan.", image: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Gen dan kromosom", content: "Informasi pewarisan sifat tersimpan di DNA. Bagian DNA yang membawa informasi untuk sifat tertentu disebut gen. DNA tersusun rapat menjadi kromosom di dalam sel. Manusia umumnya memiliki 46 kromosom dalam sel tubuh, tersusun dalam 23 pasang; satu kromosom tiap pasangan berasal dari masing-masing orang tua." },
+        { title: "Alel dominan dan resesif", content: "Alel adalah variasi dari suatu gen. Dalam model sederhana, alel dominan ditulis dengan huruf besar (A), sedangkan alel resesif dengan huruf kecil (a). Individu AA atau Aa menunjukkan sifat dominan, sementara aa menunjukkan sifat resesif. Banyak sifat manusia sebenarnya dipengaruhi banyak gen dan lingkungan, jadi model ini hanya contoh dasar." },
+        { title: "Membaca persilangan sederhana", content: "Jika dua individu Aa disilangkan, masing-masing dapat mewariskan A atau a. Kombinasinya adalah AA, Aa, Aa, dan aa. Perbandingan genotipe menjadi 1 AA : 2 Aa : 1 aa. Dengan dominansi penuh, perbandingan fenotipe sederhananya 3 dominan : 1 resesif. Ini adalah peluang, bukan jaminan hasil pada setiap keluarga." },
+        { title: "Meiosis dan sel kelamin", content: "Sel tubuh manusia memiliki 46 kromosom, sedangkan sel kelamin memiliki 23. Pembentukan sel kelamin berlangsung melalui meiosis, yaitu pembelahan yang mengurangi jumlah kromosom menjadi setengah. Saat pembuahan, sel sperma dan sel telur bergabung sehingga jumlah kromosom kembali menjadi 46. Proses ini juga membantu menghasilkan kombinasi sifat yang beragam." },
+        { title: "Gen, lingkungan, dan variasi", content: "Tidak semua perbedaan sifat ditentukan oleh satu gen. Tinggi badan, misalnya, dipengaruhi banyak gen serta faktor lingkungan seperti gizi dan kesehatan. Karena itu, hasil persilangan sederhana berguna untuk memahami konsep dasar, tetapi tidak selalu dapat meramalkan sifat seseorang secara tepat. Variasi antarmanusia adalah hal yang wajar." }
+      ] },
+      { id: "poster", title: "Merancang poster yang komunikatif", category: "Seni", level: "KELAS 9", duration: "20 menit", description: "Rancang poster dengan pesan yang jelas melalui gambar, warna, dan tipografi.", image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Menentukan pesan utama", content: "Poster harus menyampaikan satu pesan yang mudah ditangkap dalam beberapa detik. Tentukan siapa audiensnya dan tindakan apa yang diharapkan. Untuk poster hemat air di sekolah, misalnya, gunakan judul singkat seperti “Tutup Keran Setelah Dipakai” dan satu ajakan yang jelas." },
+        { title: "Memilih warna dan tipografi", content: "Gunakan perbedaan ukuran dan ketebalan huruf untuk menunjukkan urutan informasi: judul paling menonjol, lalu penjelas, kemudian detail. Pilih warna dengan kontras yang cukup agar tulisan terbaca. Batasi jenis huruf dan warna supaya poster tidak terasa ramai." },
+        { title: "Menyusun tata letak poster", content: "Letakkan judul dan gambar utama di area yang mudah dilihat, lalu susun informasi pendukung secara teratur. Sisakan ruang kosong agar elemen tidak saling berebut perhatian. Setelah selesai, lihat poster dari jarak beberapa langkah: pesan utamanya tetap harus terbaca." },
+        { title: "Membuat sketsa dan memilih media", content: "Sebelum membuat poster final, buat beberapa sketsa kecil untuk mencoba susunan judul, gambar, dan informasi. Pilih media sesuai tujuan: kertas dan alat gambar untuk karya manual, atau aplikasi desain untuk poster digital. Pastikan pilihan media mendukung pesan dan mudah dibagikan kepada audiens." },
+        { title: "Mengevaluasi hasil poster", content: "Periksa kembali ejaan, keterbacaan, kesesuaian gambar, dan ketepatan informasi. Minta teman melihat poster selama beberapa detik, lalu tanyakan pesan apa yang mereka tangkap. Jika jawabannya berbeda dari tujuanmu, perjelas judul atau kurangi elemen yang tidak penting." }
+      ] },
+      { id: "transformasi", title: "Transformasi geometri", category: "Matematika", level: "KELAS 9", duration: "24 menit", description: "Pelajari perpindahan, pencerminan, perputaran, dan perubahan ukuran bangun.", image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Apa itu transformasi?", content: "Transformasi adalah perubahan posisi atau ukuran titik dan bangun pada bidang koordinat. Setiap titik memiliki pasangan koordinat (x, y). Dengan mengikuti aturan transformasi, kita bisa menentukan koordinat bayangan tanpa menggambar ulang dari awal." },
+        { title: "Translasi dan refleksi", content: "Translasi menggeser titik dengan aturan (x, y) menjadi (x + a, y + b). Contoh, titik A(2, 1) ditranslasi 3 satuan ke kanan dan 2 ke atas menjadi A′(5, 3). Refleksi pada sumbu x mengubah (x, y) menjadi (x, −y), seperti cermin mendatar." },
+        { title: "Rotasi dan dilatasi", content: "Rotasi 90° berlawanan arah jarum jam dengan pusat O mengubah (x, y) menjadi (−y, x). Dilatasi berpusat di O dengan faktor skala k mengubah (x, y) menjadi (kx, ky). Contohnya, dilatasi titik (2, 1) dengan k = 2 menghasilkan (4, 2), sehingga jaraknya dari pusat menjadi dua kali lipat." },
+        { title: "Pencerminan pada garis lain", content: "Selain sumbu x, titik dapat dicerminkan terhadap sumbu y dengan aturan (x, y) menjadi (−x, y). Pencerminan terhadap garis y = x menukar posisi koordinat menjadi (y, x). Contohnya, titik B(3, 1) dicerminkan terhadap y = x menjadi B′(1, 3). Periksa letak titik dan garis cermin agar tanda koordinat tidak tertukar." },
+        { title: "Menggabungkan transformasi", content: "Sebuah bangun dapat mengalami lebih dari satu transformasi, misalnya digeser lalu dicerminkan. Urutannya perlu diperhatikan karena hasil akhir bisa berbeda jika urutannya dibalik. Catat koordinat awal, terapkan aturan pertama pada setiap titik, lalu gunakan hasilnya untuk aturan berikutnya. Bandingkan panjang sisi dan sudut untuk memastikan bentuknya tetap sesuai." }
+      ] },
+      { id: "reproduksi", title: "Sistem reproduksi manusia", category: "IPA", level: "KELAS 9", duration: "25 menit", description: "Kenali fungsi organ reproduksi, perubahan pubertas, dan cara menjaga kesehatan diri.", image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80", lessons: [
+        { title: "Organ dan fungsinya", content: "Sistem reproduksi terdiri dari organ yang bekerja menghasilkan sel kelamin dan mendukung proses reproduksi. Pada laki-laki, testis menghasilkan sperma. Pada perempuan, ovarium menghasilkan sel telur; rahim menjadi tempat janin berkembang jika terjadi kehamilan. Memahami fungsi organ membantu kita merawat tubuh dengan benar." },
+        { title: "Pubertas dan perubahan tubuh", content: "Pubertas adalah masa ketika tubuh berkembang menuju kematangan reproduksi akibat perubahan hormon. Perubahan bisa meliputi pertumbuhan cepat, perubahan suara, tumbuhnya rambut di beberapa bagian tubuh, menstruasi, atau mimpi basah. Waktu dan urutan perubahan berbeda pada setiap orang, dan itu merupakan hal yang normal." },
+        { title: "Menjaga kesehatan reproduksi", content: "Jaga kebersihan tubuh dan pakaian dalam, ganti pembalut secara teratur saat menstruasi, dan gunakan informasi kesehatan dari sumber tepercaya. Hormati batasan tubuh sendiri maupun orang lain. Jika ada perubahan yang terasa mengganggu atau menimbulkan kekhawatiran, bicarakan dengan orang dewasa tepercaya atau tenaga kesehatan." },
+        { title: "Siklus menstruasi dan pembuahan", content: "Siklus menstruasi adalah rangkaian perubahan yang menyiapkan tubuh untuk kemungkinan kehamilan. Jika sel telur tidak dibuahi, lapisan rahim akan luruh dan keluar sebagai darah menstruasi. Lama siklus dapat berbeda pada setiap orang dan dapat berubah dari bulan ke bulan, terutama pada masa awal pubertas. Catatan kalender dapat membantu mengenali pola tubuh." },
+        { title: "Perubahan emosi dan mencari bantuan", content: "Perubahan hormon, pertumbuhan, dan pengalaman baru dapat memengaruhi suasana hati saat pubertas. Istirahat cukup, makan seimbang, bergerak aktif, dan berbicara dengan orang yang dipercaya dapat membantu menjaga kesejahteraan. Setiap orang berkembang dengan kecepatan berbeda. Jangan ragu bertanya kepada orang tua, guru, konselor, atau tenaga kesehatan bila ada hal yang membingungkan." }
+      ] }
+    ];
+
+    const grid = document.querySelector("#course-grid");
+    const searchInput = document.querySelector("#search-input");
+    const dialog = document.querySelector("#lesson-dialog");
+    const celebration = document.querySelector("#celebration");
+    const progressKey = "ruang-belajar-progress";
+    const bookmarkKey = "ruang-belajar-bookmarks";
+    const safeReadStorage = (key, fallback) => {
+      try {
+        const rawValue = localStorage.getItem(key);
+        return rawValue ? JSON.parse(rawValue) : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    };
+    let activeFilter = "Semua";
+    let selectedCourse = null;
+    let celebrationTimer;
+    let completed = safeReadStorage(progressKey, []).filter((id) => courses.some((course) => course.id === id));
+    let bookmarks = safeReadStorage(bookmarkKey, []).filter((id) => courses.some((course) => course.id === id));
+
+    function renderCourses() {
+      const query = searchInput.value.trim().toLocaleLowerCase("id");
+    const visibleCourses = courses.filter((course) => {
+        const matchesFilter = activeFilter === "Semua" || course.category === activeFilter;
+        const matchesQuery = `${course.title} ${course.category} ${course.description}`.toLocaleLowerCase("id").includes(query);
+        return matchesFilter && matchesQuery;
+      });
+
+      grid.innerHTML = visibleCourses.length ? visibleCourses.map((course, index) => {
+        const isSaved = bookmarks.includes(course.id);
+        const isDone = completed.includes(course.id);
+        return `<article class="course-card" style="animation-delay:${index * 45}ms">
+          <div class="course-art" style="background-image:url('${course.image}')">
+            <span class="course-level">${course.level}</span>
+            <button class="bookmark ${isSaved ? "saved" : ""}" type="button" data-bookmark="${course.id}" aria-label="${isSaved ? "Hapus bookmark" : "Simpan materi"}" aria-pressed="${isSaved}">${isSaved ? "♥" : "♡"}</button>
+          </div>
+          <div class="course-info"><p class="course-subject">${course.category}</p><h3>${course.title}</h3><p>${course.description}</p>
+            <div class="course-footer"><span>${isDone ? "Selesai" : course.duration}</span><button type="button" data-course="${course.id}">${isDone ? "Ulangi" : "Lihat materi"} →</button></div>
+            <div class="progress-strip" aria-label="${isDone ? "Selesai" : "Belum selesai"}"><span style="width:${isDone ? 100 : 0}%"></span></div>
+          </div>
+        </article>`;
+      }).join("") : '<p class="empty-state">Belum ada materi yang cocok. Coba kata kunci atau kategori lain.</p>';
+    }
+
+    function updateProgress() {
+      document.querySelector("#progress-count").textContent = `${completed.length} pelajaran selesai`;
+      localStorage.setItem(progressKey, JSON.stringify(completed));
+    }
+
+    function openCourse(id) {
+      selectedCourse = courses.find((course) => course.id === id);
+      if (!selectedCourse) return;
+      document.querySelector("#dialog-category").textContent = `MATERI · ${selectedCourse.category.toUpperCase()}`;
+      document.querySelector("#dialog-title").textContent = selectedCourse.title;
+      document.querySelector("#dialog-description").textContent = selectedCourse.description;
+      document.querySelector("#dialog-duration").textContent = `${selectedCourse.lessons.length} bagian · ${selectedCourse.duration}`;
+      document.querySelector("#lesson-list").innerHTML = selectedCourse.lessons.map((lesson, index) => `<section class="lesson-entry"><h3><span>${String(index + 1).padStart(2, "0")}</span>${lesson.title}</h3><p>${lesson.content}</p></section>`).join("");
+      dialog.showModal();
+    }
+
+    function showCelebration() {
+      const colors = ["#d7ed76", "#e77e54", "#376b50", "#f0c855", "#ef7f9d", "#ffffff"];
+      const bursts = [{ x: "18%", y: "30%" }, { x: "82%", y: "30%" }, { x: "50%", y: "68%" }];
+      celebration.querySelectorAll(".firework-piece").forEach((piece) => piece.remove());
+
+      bursts.forEach((burst) => {
+        for (let index = 0; index < 22; index += 1) {
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 80 + Math.random() * 190;
+          const piece = document.createElement("span");
+          piece.className = "firework-piece";
+          piece.setAttribute("aria-hidden", "true");
+          piece.style.left = burst.x;
+          piece.style.top = burst.y;
+          piece.style.backgroundColor = colors[index % colors.length];
+          piece.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+          piece.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
+          piece.style.setProperty("--rotation", `${Math.random() * 540}deg`);
+          piece.style.setProperty("--delay", `${Math.random() * 140}ms`);
+          celebration.append(piece);
+        }
+      });
+
+      celebration.classList.remove("show");
+      void celebration.offsetWidth;
+      celebration.classList.add("show");
+      window.clearTimeout(celebrationTimer);
+      celebrationTimer = window.setTimeout(() => {
+        celebration.classList.remove("show");
+        celebration.querySelectorAll(".firework-piece").forEach((piece) => piece.remove());
+      }, 2300);
+    }
+
+    grid.addEventListener("click", (event) => {
+      const courseButton = event.target.closest("[data-course]");
+      const bookmarkButton = event.target.closest("[data-bookmark]");
+      if (courseButton) openCourse(courseButton.dataset.course);
+      if (bookmarkButton) {
+        const { bookmark } = bookmarkButton.dataset;
+        bookmarks = bookmarks.includes(bookmark) ? bookmarks.filter((id) => id !== bookmark) : [...bookmarks, bookmark];
+        localStorage.setItem(bookmarkKey, JSON.stringify(bookmarks));
+        renderCourses();
+      }
+    });
+    document.querySelectorAll(".filter").forEach((button) => button.addEventListener("click", () => {
+      activeFilter = button.dataset.filter;
+      document.querySelectorAll(".filter").forEach((filter) => {
+        const isActive = filter === button;
+        filter.classList.toggle("active", isActive);
+        filter.setAttribute("aria-pressed", String(isActive));
+      });
+      renderCourses();
+    }));
+    searchInput.addEventListener("input", renderCourses);
+    document.querySelector(".close-button").addEventListener("click", () => {
+      dialog.close();
+      selectedCourse = null;
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+        selectedCourse = null;
+      }
+    });
+    dialog.addEventListener("close", () => {
+      selectedCourse = null;
+    });
+    document.querySelector("#complete-button").addEventListener("click", () => {
+      const toast = document.querySelector("#toast");
+      if (!selectedCourse) return;
+
+      if (!completed.includes(selectedCourse.id)) {
+        completed = [...completed, selectedCourse.id];
+        updateProgress();
+        renderCourses();
+        dialog.close();
+        showCelebration();
+        toast.textContent = "Pelajaran selesai. Kerja bagus!";
+      } else {
+        dialog.close();
+        toast.textContent = "Materi ini sudah kamu selesaikan sebelumnya.";
+      }
+
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 2400);
+    });
+    document.querySelector(".featured [data-course]").addEventListener("click", (event) => openCourse(event.currentTarget.dataset.course));
+    updateProgress();
+    renderCourses();
+  </script>
+</body>
+</html>
